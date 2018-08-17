@@ -2,6 +2,7 @@
 MNIST-data
 *.pb
 *.ckpt.*
+*.tflite
 checkpoint
 
 # Byte-compiled / optimized / DLL files
