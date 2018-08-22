@@ -9,9 +9,8 @@ sess = tf.Session()
 
 x = tf.placeholder(tf.float32, shape=[None, 784], name='input')
 
-W = tf.Variable(tf.zeros([784, 10]), name='weight')
-b = tf.Variable(tf.zeros([10]), name='bias')
-y = tf.add(tf.matmul(x, W), b, name='prob')
+y = tf.layers.Dense(10)(x)
+output = tf.nn.softmax(y, axis=1, name='output')
 
 tf.contrib.quantize.create_eval_graph()
 
@@ -23,7 +22,7 @@ with open('eval.pb', 'w') as f:
     f.write(str(g.as_graph_def()))
 
 batch = mnist.train.next_batch(100)
-results = sess.run(y, feed_dict={x: batch[0]})
+results = sess.run(output, feed_dict={x: batch[0]})
 
 truth = np.argmax(batch[1], -1)
 predict = np.argmax(results, -1)
