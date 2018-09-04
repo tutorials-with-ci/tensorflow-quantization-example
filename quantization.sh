@@ -4,6 +4,6 @@ tflite_convert \
     --inference_type=QUANTIZED_UINT8 \
     --input_type=QUANTIZED_UINT8 \
     --input_arrays=input \
-    --output_arrays=output \
+    --output_arrays=prob \
     --mean_values=128 \
     --std_dev_values=127

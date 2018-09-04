@@ -11,3 +11,4 @@ script:
     - python test.py
     - sh ./freeze.sh
     - sh ./quantization.sh
+    - python ./load_tflite.py
