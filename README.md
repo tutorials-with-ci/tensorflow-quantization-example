@@ -1,4 +1,4 @@
-# TensorFlow_Quantization_Example
+# TensorFlow Quantization Example
 
 [![Build Status](https://travis-ci.com/SF-Zhou/TensorFlow_Quantization_Example.svg?branch=master)](https://travis-ci.com/SF-Zhou/TensorFlow_Quantization_Example)
 
@@ -24,4 +24,5 @@ script:
     - python test.py
     - sh ./freeze.sh
     - sh ./quantization.sh
+    - python ./load_tflite.py
 ```
