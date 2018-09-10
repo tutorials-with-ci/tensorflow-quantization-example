@@ -1,6 +1,6 @@
 # TensorFlow Quantization Example
 
-[![Build Status](https://travis-ci.com/SF-Zhou/TensorFlow_Quantization_Example.svg?branch=master)](https://travis-ci.com/SF-Zhou/TensorFlow_Quantization_Example)
+[![Build Status](https://travis-ci.com/SF-Zhou/tensorflow-quantization-example.svg?branch=master)](https://travis-ci.com/SF-Zhou/tensorflow-quantization-example)
 
 TensorFlow Quantization Example, for TensorFlow Lite
 
