@@ -2,29 +2,42 @@ import numpy as np
 from tensorflow.contrib.lite.python.interpreter import Interpreter
 from tensorflow.examples.tutorials.mnist import input_data
 
+
+class TfLiteModel:
+    def __init__(self, model_content):
+        self.model_content = bytes(model_content)
+        self.interpreter = Interpreter(model_content=self.model_content)
+        input_details = self.interpreter.get_input_details()
+        output_details = self.interpreter.get_output_details()
+        print(input_details)
+        self.input_index = input_details[0]['index']
+        self.output_index = output_details[0]['index']
+
+        self.input_scale, self.input_zero_point = input_details[0]['quantization']
+        self.output_scale, self.output_zero_point = input_details[0]['quantization']
+
+        self.interpreter.allocate_tensors()
+
+    def forward(self, data_in):
+        test_input = np.array(data_in / self.input_scale + self.input_zero_point, dtype=np.uint8).reshape(1, -1)
+        self.interpreter.set_tensor(self.input_index, test_input)
+        self.interpreter.invoke()
+
+        output_data = self.interpreter.get_tensor(self.output_index)[0]
+        return (np.array(output_data, dtype=np.float32) - self.output_zero_point) * self.output_scale
+
+
 mnist = input_data.read_data_sets('MNIST-data', one_hot=True)
+batch = mnist.train.next_batch(1)
+image, label = batch[0], batch[1]
 
 model_path = './final.tflite'
 with open(model_path, 'rb') as f:
     model_content = f.read()
 
-interpreter = Interpreter(model_content=model_content)
-interpreter.allocate_tensors()
+model = TfLiteModel(model_content)
+predict = model.forward(image)
 
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
-
-batch = mnist.train.next_batch(1)
-
-test_input = np.array(batch[0] * 255, dtype=np.uint8)
-test_input = test_input.reshape((1, 28, 28, 1))
-
-interpreter.resize_tensor_input(input_details[0]['index'], np.array(test_input.shape, dtype=np.int32))
-interpreter.allocate_tensors()
-interpreter.set_tensor(input_details[0]['index'], test_input)
-interpreter.invoke()
-
-output_data = interpreter.get_tensor(output_details[0]['index'])
-print("TF-Lite Output: {}".format(output_data))
-print("Ground Truth: {}".format(batch[1]))
-print("Right? {}".format(np.argmax(output_data) == np.argmax(batch[1])))
+print("TF-Lite Output: {}".format(predict))
+print("Ground Truth: {}".format(label))
+print("Right? {}".format(np.argmax(predict) == np.argmax(label)))
