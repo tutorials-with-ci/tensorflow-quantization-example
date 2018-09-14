@@ -14,7 +14,7 @@ class TfLiteModel:
         self.output_index = output_details[0]['index']
 
         self.input_scale, self.input_zero_point = input_details[0]['quantization']
-        self.output_scale, self.output_zero_point = input_details[0]['quantization']
+        self.output_scale, self.output_zero_point = output_details[0]['quantization']
 
         self.interpreter.allocate_tensors()
 
