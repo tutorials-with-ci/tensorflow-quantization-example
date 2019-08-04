@@ -1,5 +1,5 @@
 import numpy as np
-from tensorflow.contrib.lite.python.interpreter import Interpreter
+from tensorflow.lite.python.interpreter import Interpreter
 from tensorflow.examples.tutorials.mnist import input_data
 
 
